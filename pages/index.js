@@ -3,8 +3,22 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Link from "next/link";
-
+import axios from "axios";
+import { useEffect,useState } from "react";
 export default function Home() {
+
+  const [text,setText] = useState("");
+
+  useEffect(() => {
+
+    const res  = axios.get("/api/hello").then(res => {
+      console.log(res.data);
+      setText(res.data.message);
+    })
+  }, []);
+
+
+
   return (
     <div className={styles.container}>
       <Head>

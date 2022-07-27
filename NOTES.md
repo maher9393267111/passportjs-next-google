@@ -1,0 +1,1 @@
+* import { getCookie, hasCookie, setCookie } from 'cookies-next';

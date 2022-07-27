@@ -5,14 +5,31 @@ import connect from "../lib/database";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 import { useRouter } from "next/router";
-
+import { useEffect,useState } from "react";
+import axios from "axios";
 function Dashboard({ name, email }) {
   const router = useRouter();
+const [text,setText] = useState("");
+
 
   const logout = () => {
     removeCookies("token");
     router.replace("/");
   };
+
+
+useEffect(() => {
+
+  const res  = axios.get("/api/hello").then(res => {
+    console.log(res.data);
+    setText(res.data.message);
+  })
+  // console.log("res is 🛢🛢🛢 ---->", res?.data?.message);
+  // setText(res?.data?.message);
+
+
+}, []);
+
 
   return (
     <div>
@@ -20,6 +37,7 @@ function Dashboard({ name, email }) {
         <title>Dashboard</title>
       </Head>
       <div>Welcome {name}!</div>
+      <h1>aa {text}</h1>
       <div>{email}</div>
       <button onClick={logout}>Logout</button>
     </div>
@@ -28,6 +46,10 @@ function Dashboard({ name, email }) {
 
 export async function getServerSideProps({ req, res }) {
   try {
+
+  // const res =  axios.get("/api/hello");
+  // console.log("res is 🛢🛢🛢 ---->", res?.message);
+
     // connect db
     await connect();
     // check cookie
@@ -41,7 +63,7 @@ export async function getServerSideProps({ req, res }) {
 
     const verified = await jwt.verify(token, process.env.JWT_SECRET);
     const obj = await User.findOne({ _id: verified.id });
-    console.log("obj user in Dashboard is 🔵🔵🔵---->", obj);
+  //  console.log("obj user in Dashboard is 🔵🔵🔵---->", obj);
     if (!obj)
       return {
         redirect: {

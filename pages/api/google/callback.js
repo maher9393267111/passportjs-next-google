@@ -12,7 +12,7 @@ export default async function (req, res, next) {
 
     // set cookie and send redirect after login with google successfully end
 
-    setCookies("token", info.token, {
+    setCookies("token", info.token, {  // info means user object data
       req,
       res,
     });
